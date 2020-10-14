@@ -930,7 +930,7 @@ class Org:
         statement_type: 结算类型
         :return:
         """
-        ctnm = make_name_data()
+        ctnm = org_name_data()
         cten = word_to_pinyin(ctnm)
 
         if client_type and client_type != 3:
