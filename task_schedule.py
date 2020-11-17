@@ -124,6 +124,11 @@ def main1(begin, end, stiftime, file_time, stif_num):
     temp_relation = []
     temp_stif = []
 
+    parms = ["load_org", "load_person", "load_cert", "load_address", "load_tel", "load_pact", "load_bact",
+             "load_relation", "load_stif"]
+    parm2 = [temp_org, temp_person, temp_cert, temp_address, temp_tel, temp_pact, temp_bact, temp_relation,
+             temp_stif]
+
     for num in range(begin, end):
         persons, cert, address, tel, relation, pact, bact, stif1 = make_person(num, stiftime, file_time, stif_num)
         temp_person.append(persons)
@@ -145,10 +150,7 @@ def main1(begin, end, stiftime, file_time, stif_num):
         temp_relation.append(relation2)
         temp_stif.extend(stifs2)
 
-        parms = ["load_org", "load_person", "load_cert", "load_address", "load_tel", "load_pact", "load_bact",
-                 "load_relation", "load_stif"]
-        parm2 = [temp_org, temp_person, temp_cert, temp_address, temp_tel, temp_pact, temp_bact, temp_relation,
-                 temp_stif]
+
         name = ["t_stan_org", "t_stan_person", "t_stan_cert", "t_stan_address", "t_stan_tel", "t_stan_pact", "t_stan_bact",
                 "t_stan_relation", "t_stan_stif"]
         if num % 50 == 0 and len(temp_org) != 0:
@@ -170,6 +172,18 @@ def main1(begin, end, stiftime, file_time, stif_num):
                 print('开始清理数据……')
                 li.clear()
 
+    threads = []
+    for inde, elem in enumerate(parm2):
+        log.info('开始写入{}, 编号num={}, 数量={}'.format(parms[inde], end-begin, len(temp_person)))
+        print('{}, 开始写入{}, 编号num={}, 数量={}'.format(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()),
+                                                   parms[inde], end-begin, len(temp_person)))
+        file_name = parms[inde].split('_')[-1] + "_" + file_time + '.csv'
+        t = threading.Thread(target=write_to_csv_more, args=(file_name, elem))
+        t.start()
+        threads.append(t)
+
+    for tr in threads:
+        tr.join()
 
 def main5(begin, end, stiftime, file_time, stif_num):
 

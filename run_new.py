@@ -9,8 +9,9 @@ import time
 import zipfile
 import datetime
 
-from readConfig import RunConfig
+from readConfig import RunConfig, Setting
 config = RunConfig()
+settings = Setting()
 
 from task_schedule import main1, main8, main9
 
@@ -89,15 +90,16 @@ def run1():
     #     t.join()
     # -------------------------单线程
     # 数据条数
-    o = 50
+    o = int(settings.data_num())
+    stif_num = int(settings.stif_num())
+    num_days = int(settings.num_days())
 
-    for m in range(3):
-
+    for m in range(num_days):
         st = datetime.datetime.strptime(str(t), "%Y%m%d")
         file_date_time = str(st)[:10]
         stif_time = "{}100000".format(t)
 
-        main1(n, n + o, stif_time, file_date_time, 2)
+        main1(n, n + o, stif_time, file_date_time, stif_num)
         # te()
         n += o
         t += 1
@@ -121,14 +123,16 @@ def run2():
     #     t.join()
     # -------------------------单线程
     # o数据条数
-    o = 1000
+    o = int(settings.data_num())
+    stif_num = int(settings.stif_num())
+    num_days = int(settings.num_days())
 
-    for m in range(1):
+    for m in range(num_days):
         st = datetime.datetime.strptime(str(t), "%Y%m%d")
         file_date_time = str(st)[:10]
         stif_time = "{}100000".format(t)
 
-        main8(n, n + o, stif_time, file_date_time, 1)
+        main8(n, n + o, stif_time, file_date_time, stif_num)
         n += o
         t += 1
         zip_file(zip_floder, file_date_time)

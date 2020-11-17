@@ -52,6 +52,10 @@ class Setting(BaseConfig):
         temp = self.conf.get('setting', 'STIFNUM')
         return temp
 
+    def num_days(self):
+        temp = self.conf.get('setting', 'NUMDAYS')
+        return temp
+
 
 class RunConfig:
     def __init__(self):
